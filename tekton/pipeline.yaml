@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-and-deploy
+spec:
+  tasks:
+    - name: build-image
+      taskRef:
+        name: buildah
+      params:
+        - name: IMAGE
+          value: docker.io/julendk/go-server:latest
+
+    - name: push-image
+      taskRef:
+        name: push
+      runAfter:
+        - build-image
+      params:
+        - name: IMAGE
+          value: docker.io/julendk/go-server:latest
+
+    - name: update-deployment
+      taskRef:
+        name: update-git
+      runAfter:
+        - push-image
+      params:
+        - name: REPO
+          value: https://github.com/tu-usuario/my-go-app-manifests.git
+        - name: FILE
+          value: "manifests/deployment.yaml"
+        - name: NEW_TAG
+          value: "latest"
