@@ -27,7 +27,7 @@ spec:
         - push-image
       params:
         - name: REPO
-          value: https://github.com/tu-usuario/my-go-app-manifests.git
+          value: https://github.com/juleneetac/goserver.git
         - name: FILE
           value: "manifests/deployment.yaml"
         - name: NEW_TAG
